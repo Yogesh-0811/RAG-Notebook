@@ -15,7 +15,6 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        // Check file type
         const allowedTypes = ['.pdf', '.csv'];
         const fileExt = path.extname(file.name).toLowerCase();
         
@@ -26,18 +25,15 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        // Create uploads directory if it doesn't exist
         const uploadDir = path.join(process.cwd(), 'public', 'uploads');
         if (!existsSync(uploadDir)) {
             await mkdir(uploadDir, { recursive: true });
         }
 
-        // Generate unique filename
         const timestamp = Date.now();
         const filename = `${timestamp}-${file.name}`;
         const filepath = path.join(uploadDir, filename);
 
-        // Convert file to buffer and save
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
         await writeFile(filepath, buffer);

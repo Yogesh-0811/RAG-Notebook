@@ -14,7 +14,6 @@ export async function POST(request) {
 
         console.log(`💬 Chat request: ${message}`);
 
-        // Call your modified chat function
         const response = await processChat(message);
 
         return NextResponse.json({

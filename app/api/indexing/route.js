@@ -8,7 +8,6 @@ export async function POST(request) {
     try {
         const contentType = request.headers.get('content-type');
         
-        // Handle file uploads
         if (contentType?.includes('multipart/form-data')) {
             const formData = await request.formData();
             const file = formData.get('file');
@@ -21,22 +20,18 @@ export async function POST(request) {
                 }, { status: 400 });
             }
 
-            // Create temporary file
             const bytes = await file.arrayBuffer();
             const buffer = Buffer.from(bytes);
             
-            // Save to temporary directory
             const tempDir = os.tmpdir();
             const tempFilePath = path.join(tempDir, `upload_${Date.now()}_${file.name}`);
             
             await fs.writeFile(tempFilePath, buffer);
             
             try {
-                // Process the file
                 console.log(`📚 Processing uploaded file: ${file.name} (${type})`);
                 const result = await indexDocument(tempFilePath, type);
                 
-                // Clean up temp file
                 await fs.unlink(tempFilePath);
                 
                 return NextResponse.json({
@@ -46,7 +41,6 @@ export async function POST(request) {
                 });
                 
             } catch (error) {
-                // Clean up temp file even if processing fails
                 try {
                     await fs.unlink(tempFilePath);
                 } catch (cleanupError) {
@@ -56,7 +50,6 @@ export async function POST(request) {
             }
         }
         
-        // Handle JSON requests (for URLs)
         else {
             const { input, type } = await request.json();
 
