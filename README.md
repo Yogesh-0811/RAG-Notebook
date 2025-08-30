@@ -109,12 +109,6 @@ See [Next.js deployment docs](https://nextjs.org/docs/app/building-your-applicat
 
 ---
 
-## Contributing
-
-Pull requests and feedback are welcome!
-
----
-
 ## License
 
 MIT
